@@ -1,6 +1,4 @@
-import React, { useState,useReducer } from "react";
-import "./../styles/App.css";
-
+import React, { useState } from "react";
 
 const states = [{
 	name : "Madhya Pradesh",
@@ -137,16 +135,80 @@ const states = [{
 	}]
 }];
 
+function App() {
+  // 🧠 Step 1: Manage selected indices
+  const [selectedStateIndex, setSelectedStateIndex] = useState(0);
+  const [selectedCityIndex, setSelectedCityIndex] = useState(0);
+  const [selectedLandmarkIndex, setSelectedLandmarkIndex] = useState(0);
 
-function App() 
-{
-	// Do not alter/remove main div
-	return (
-	<div id="main">
-		
-	</div>
-	);
+  const selectedState = states[selectedStateIndex];
+  const selectedCity = selectedState.city[selectedCityIndex];
+  const selectedLandmark = selectedCity.landmarks[selectedLandmarkIndex];
+
+  // 🧩 Handlers
+  const handleStateChange = (e) => {
+    const newIndex = parseInt(e.target.value);
+    setSelectedStateIndex(newIndex);
+    setSelectedCityIndex(0); // reset city
+    setSelectedLandmarkIndex(0); // reset landmark
+  };
+
+  const handleCityChange = (e) => {
+    const newIndex = parseInt(e.target.value);
+    setSelectedCityIndex(newIndex);
+    setSelectedLandmarkIndex(0); // reset landmark
+  };
+
+  const handleLandmarkChange = (e) => {
+    setSelectedLandmarkIndex(parseInt(e.target.value));
+  };
+
+  return (
+    <div id="main">
+      {/* STATE DROPDOWN */}
+      <select id="state" value={selectedStateIndex} onChange={handleStateChange}>
+        {states.map((state, index) => (
+          <option key={index} value={index}>
+            {state.name}
+          </option>
+        ))}
+      </select>
+
+      {/* CITY DROPDOWN */}
+      <select id="city" value={selectedCityIndex} onChange={handleCityChange}>
+        {selectedState.city.map((city, index) => (
+          <option key={index} value={index}>
+            {city.name}
+          </option>
+        ))}
+      </select>
+
+      {/* LANDMARK DROPDOWN */}
+      <select
+        id="landmark"
+        value={selectedLandmarkIndex}
+        onChange={handleLandmarkChange}
+      >
+        {selectedCity.landmarks.map((landmark, index) => (
+          <option key={index} value={index}>
+            {landmark.name}
+          </option>
+        ))}
+      </select>
+
+      {/* DISPLAY SELECTED STATE */}
+      <div id="state-name">{selectedState.name}</div>
+      <div id="state-description">{selectedState.description}</div>
+
+      {/* DISPLAY SELECTED CITY */}
+      <div id="city-name">{selectedCity.name}</div>
+      <div id="city-description">{selectedCity.description}</div>
+
+      {/* DISPLAY SELECTED LANDMARK */}
+      <div id="landmark-name">{selectedLandmark.name}</div>
+      <div id="landmark-description">{selectedLandmark.description}</div>
+    </div>
+  );
 }
-
 
 export default App;
